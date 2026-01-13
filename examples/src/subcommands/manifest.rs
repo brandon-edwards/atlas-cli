@@ -193,7 +193,7 @@ fn export_manifest(framework: &mut AtlasTestFramework, step: &Step) -> Result<Op
         .get("format")
         .and_then(|v| v.as_str())
         .unwrap_or("json");
-    cmd.add_flag("format", Some(format));
+    cmd.add_flag("encoding", Some(format));
 
     let max_depth = params
         .get("max_depth")
