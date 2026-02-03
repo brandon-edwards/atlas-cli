@@ -1199,23 +1199,23 @@ mod tests {
         assert_eq!(claim.claim_generator_info, "atlas-cli:0.2.0");
     }
 
-    // #[test]
-    // fn test_create_manifest() -> Result<()>{
-    //     let config = make_test_manifest_config();
-    //     let result = create_manifest(config, AssetKind::Model);
-    //     assert!(result.is_ok()); // Should succeed even with no ingredients
+    #[test]
+    fn test_create_manifest() -> Result<()>{
+        let config = make_test_manifest_config();
+        let result = create_manifest(config, AssetKind::Model);
+        assert!(result.is_ok()); // Should succeed even with no ingredients
 
-    //     Ok(())
-    // }
+        Ok(())
+    }
 
-    // #[test]
-    // fn test_create_oms_manifest() -> Result<()> {
-    //     let config = make_test_manifest_config();
-    //     let result = create_oms_manifest(config);
-    //     assert!(result.is_ok()); // Should succeed with the provided key
+    #[test]
+    fn test_create_oms_manifest() -> Result<()> {
+        let config = make_test_manifest_config();
+        let result = create_oms_manifest(config);
+        assert!(result.is_ok()); // Should succeed with the provided key
 
-    //     Ok(())
-    // }
+        Ok(())
+    }
 
     #[test]
     fn test_create_oms_manifest_no_key() {
