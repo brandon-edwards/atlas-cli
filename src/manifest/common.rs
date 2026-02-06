@@ -344,7 +344,7 @@ pub fn create_manifest(config: ManifestCreationConfig, asset_kind: AssetKind) ->
 /// };
 ///
 /// create_oms_manifest(config).unwrap();
-///```
+/// ```
 pub fn create_oms_manifest(config: ManifestCreationConfig) -> Result<()> {
     let format = ManifestFormat::OMS;
     format.create(&config, AssetKind::Model)
