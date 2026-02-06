@@ -234,6 +234,7 @@ fn generate_c2pa_claim(config: &ManifestCreationConfig, asset_kind: AssetKind) -
 }
 
 /// Creates a C2PA manifest for a model, dataset, software, or evaluation
+// TODO: Should I make this public?
 fn create_c2pa_manifest(config: &ManifestCreationConfig, asset_kind: AssetKind) -> Result<Manifest> {
     let claim = generate_c2pa_claim(&config, asset_kind)?;
 
@@ -343,7 +344,7 @@ pub fn create_manifest(config: ManifestCreationConfig, asset_kind: AssetKind) ->
 /// };
 ///
 /// create_oms_manifest(config).unwrap();
-///
+///```
 pub fn create_oms_manifest(config: ManifestCreationConfig) -> Result<()> {
     let format = ManifestFormat::OMS;
     format.create(&config, AssetKind::Model)
@@ -1011,7 +1012,7 @@ mod tests {
 
     const TEST_ASSET_FILENAME: &str = "empty_test_model_file_not_expected_to_persist.onnx";
 
-    // Helper function to get the module directory (for creating test files)
+    // Helper function to get the module directory (for a predetermined directory in which to create temporary test files)
     fn module_dir() -> PathBuf {
         PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("src")
@@ -1020,7 +1021,7 @@ mod tests {
     fn make_test_manifest_config() -> (tempfile::TempDir, ManifestCreationConfig) {
         let (_secure_key, tmp_key_dir) = generate_temp_key().unwrap();
         let key_path = tmp_key_dir.path().join("test_key.pem");
-        // must return the temp_key_dir to ensure it lives long enough for the tests that use the config, otherwise the temp dir (and key) will be deleted immediately after this function returns
+        // must return the temp_key_dir (temp dirs get deleted when out of scope)
         (tmp_key_dir, ManifestCreationConfig {
             name: "test-model".to_string(),
             description: Some("A test model".to_string()),
