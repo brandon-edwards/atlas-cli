@@ -1007,7 +1007,7 @@ mod tests {
     use super::*;
     use crate::signing::test_utils::generate_temp_key;
     use tempfile::TempPath;
-    use std::fs::{File, OpenOptions};
+    use std::fs::OpenOptions;
 
     const TEST_ASSET_FILENAME: &str = "empty_test_model_file_not_expected_to_persist.onnx";
 
