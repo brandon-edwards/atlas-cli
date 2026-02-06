@@ -990,6 +990,7 @@ impl ManifestFormat {
             }
         }
         // TODO: We currently store the manifest in both cases (OMS and standalone) regardless of the fact we are creating an envelope in the OMS case.
+        // TODO: Not tested.
         
         // Store manifest if storage is provided
         if let Some(storage) = &config.storage {
@@ -1006,9 +1007,10 @@ impl ManifestFormat {
 mod tests {
     use super::*;
     use crate::signing::test_utils::generate_temp_key;
-    use std::fs::File;
+    use tempfile::TempPath;
+    use std::fs::{File, OpenOptions};
 
-    const TEST_ASSET_FILENAME: &str = "empty_test_model_file.onnx";
+    const TEST_ASSET_FILENAME: &str = "empty_test_model_file_not_expected_to_persist.onnx";
 
     // Helper function to get the module directory (for creating test files)
     fn module_dir() -> PathBuf {
@@ -1045,8 +1047,7 @@ mod tests {
         let key_path = tmp_key_dir.path().join("test_key.pem");
         let asset_dirpath = module_dir();
         let path = asset_dirpath.join(TEST_ASSET_FILENAME);
-        println!("Using test asset file for config {:#?}", path.to_str());
-        // return the temp_dir so that it doesn't get deleted due to coming out of scope
+        // return the temp_dir (avoid deletion due to coming out of scope)
         (tmp_key_dir, asset_dirpath, ManifestCreationConfig {
             name: "test-model".to_string(),
             description: Some("A test model".to_string()),
@@ -1096,8 +1097,11 @@ mod tests {
     fn test_create_oms_manifest() -> Result<()> {
         let (_tmp_key_dir, asset_dirpath, config) = make_test_oms_manifest_config();
         let asset_path = asset_dirpath.join(TEST_ASSET_FILENAME);
-        let _file = File::create(&asset_path)?;
-        assert!(asset_path.exists(), "Test asset file does not exist at {:#?}", asset_path.to_str());
+        let _file = OpenOptions::new()
+            .write(true)
+            .create_new(true) // Ensure if file already exists that we do not overwrite it
+            .open(&asset_path)?;
+        let _temp_path = TempPath::from_path(asset_path); // Ensure the file is deleted after the test
         let result = create_oms_manifest(config);
         assert!(result.is_ok(), 
                 "create_oms_manifest failed with error: {:#?}", 
