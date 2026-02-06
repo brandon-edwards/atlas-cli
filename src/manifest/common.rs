@@ -234,7 +234,6 @@ fn generate_c2pa_claim(config: &ManifestCreationConfig, asset_kind: AssetKind) -
 }
 
 /// Creates a C2PA manifest for a model, dataset, software, or evaluation
-// TODO: Find better naming, this is the core creation after the refactor
 fn create_c2pa_manifest(config: &ManifestCreationConfig, asset_kind: AssetKind) -> Result<Manifest> {
     let claim = generate_c2pa_claim(&config, asset_kind)?;
 
