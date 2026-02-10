@@ -1,0 +1,85 @@
+{
+  "claim_generator": "atlas-cli:0.2.0",
+  "title": "test-model",
+  "instance_id": "urn:c2pa:505bc929-3c24-4999-acb1-f19c79b59f8f",
+  "ingredients": [],
+  "claim": {
+    "instance_id": "urn:c2pa:7662ef98-ea4a-4a0b-a1a0-dafb47cc1998",
+    "created_assertions": [
+      {
+        "CreativeWork": {
+          "@context": "http://schema.org/",
+          "@type": "Model",
+          "author": [
+            {
+              "@type": "Organization",
+              "name": "Test Org"
+            },
+            {
+              "@type": "Person",
+              "name": "Test Author"
+            }
+          ]
+        }
+      },
+      {
+        "Action": {
+          "actions": [
+            {
+              "action": "c2pa.created",
+              "software_agent": "atlas-cli:0.2.0",
+              "parameters": {},
+              "digital_source_type": "http://cv.iptc.org/newscodes/digitalsourcetype/algorithmicMedia",
+              "instance_id": null
+            }
+          ]
+        }
+      }
+    ],
+    "ingredients": [],
+    "signature": "Y0C7eF5L7XX2oafat9hGEEZwyvV9xKcXmemDnQqGJqFVe6mcDARMvJYLQoTUEljE8/CUdytR1GWDyiZKGxBc9Ma/yp05OTuEOB6dkbsxVZ/5is1qGwG72+s7pnwshwQqxg3jdqQQa7hWPYTXR6f7hhChaUbILqeSmxbl798Q7C+H2LEMSOlFsehSFkLppOSz2Fgxzh1zgUxa/40LBme7rvSzghVLfY33Tg+kWGrv/ixCPrgNc2khrsFBYe2kUQJ4vXeamyLRQoTp3e6Ywefk/I72aM7983SdTzSyP/0n418a8nwdYeKCADIphTt/tSiIS0PvSokOMExPlzYifQwtXA==",
+    "claim_generator_info": "atlas-cli:0.2.0",
+    "created_at": "2026-02-10T22:38:05.987620708Z"
+  },
+  "created_at": "2026-02-10T22:38:05.987627934Z",
+  "cross_references": [],
+  "c2pa.claim.v2": {
+    "instance_id": "urn:c2pa:7662ef98-ea4a-4a0b-a1a0-dafb47cc1998",
+    "created_assertions": [
+      {
+        "CreativeWork": {
+          "@context": "http://schema.org/",
+          "@type": "Model",
+          "author": [
+            {
+              "@type": "Organization",
+              "name": "Test Org"
+            },
+            {
+              "@type": "Person",
+              "name": "Test Author"
+            }
+          ]
+        }
+      },
+      {
+        "Action": {
+          "actions": [
+            {
+              "action": "c2pa.created",
+              "software_agent": "atlas-cli:0.2.0",
+              "parameters": {},
+              "digital_source_type": "http://cv.iptc.org/newscodes/digitalsourcetype/algorithmicMedia",
+              "instance_id": null
+            }
+          ]
+        }
+      }
+    ],
+    "ingredients": [],
+    "signature": null,
+    "claim_generator_info": "atlas-cli:0.2.0",
+    "created_at": "2026-02-10T22:38:05.987620708Z"
+  },
+  "is_active": true
+}

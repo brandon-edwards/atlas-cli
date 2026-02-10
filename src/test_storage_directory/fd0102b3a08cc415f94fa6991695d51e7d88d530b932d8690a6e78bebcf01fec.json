@@ -1,0 +1,123 @@
+{
+  "claim_generator": "atlas-cli:0.2.0",
+  "title": "test-model",
+  "instance_id": "urn:c2pa:323e2bf7-43ab-47e7-a654-a21d81190790",
+  "ingredients": [],
+  "claim": {
+    "instance_id": "urn:c2pa:f577fedd-91ef-42b9-9246-e68bbdab061f",
+    "created_assertions": [
+      {
+        "CreativeWork": {
+          "@context": "http://schema.org/",
+          "@type": "Model",
+          "author": [
+            {
+              "@type": "Organization",
+              "name": "Test Org"
+            },
+            {
+              "@type": "Person",
+              "name": "Test Author"
+            }
+          ]
+        }
+      },
+      {
+        "Action": {
+          "actions": [
+            {
+              "action": "c2pa.created",
+              "software_agent": "atlas-cli:0.2.0",
+              "parameters": {},
+              "digital_source_type": "http://cv.iptc.org/newscodes/digitalsourcetype/algorithmicMedia",
+              "instance_id": null
+            }
+          ]
+        }
+      }
+    ],
+    "ingredients": [
+      {
+        "title": "Test model ingredient",
+        "relationship": "componentOf",
+        "dc:format": "application/onnx",
+        "document_id": "uuid:03539e2d-fb89-452e-afdb-bdbf21975af8",
+        "instance_id": "uuid:5663263d-02c2-4cb1-9d84-c52da939b43a",
+        "data": {
+          "url": "file:///home/edwardsb/repositories/brandon-atlas-cli/src/empty_test_model_file_not_expected_to_persist.onnx",
+          "alg": "sha384",
+          "hash": "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b",
+          "data_types": [
+            "c2pa.types.model.onnx"
+          ],
+          "linked_ingredient_url": null,
+          "linked_ingredient_hash": null
+        },
+        "linked_ingredient": null
+      }
+    ],
+    "signature": null,
+    "claim_generator_info": "atlas-cli:0.2.0",
+    "created_at": "2026-02-10T22:38:06.106306248Z"
+  },
+  "created_at": "2026-02-10T22:38:06.106316944Z",
+  "cross_references": [],
+  "c2pa.claim.v2": {
+    "instance_id": "urn:c2pa:f577fedd-91ef-42b9-9246-e68bbdab061f",
+    "created_assertions": [
+      {
+        "CreativeWork": {
+          "@context": "http://schema.org/",
+          "@type": "Model",
+          "author": [
+            {
+              "@type": "Organization",
+              "name": "Test Org"
+            },
+            {
+              "@type": "Person",
+              "name": "Test Author"
+            }
+          ]
+        }
+      },
+      {
+        "Action": {
+          "actions": [
+            {
+              "action": "c2pa.created",
+              "software_agent": "atlas-cli:0.2.0",
+              "parameters": {},
+              "digital_source_type": "http://cv.iptc.org/newscodes/digitalsourcetype/algorithmicMedia",
+              "instance_id": null
+            }
+          ]
+        }
+      }
+    ],
+    "ingredients": [
+      {
+        "title": "Test model ingredient",
+        "relationship": "componentOf",
+        "dc:format": "application/onnx",
+        "document_id": "uuid:03539e2d-fb89-452e-afdb-bdbf21975af8",
+        "instance_id": "uuid:5663263d-02c2-4cb1-9d84-c52da939b43a",
+        "data": {
+          "url": "file:///home/edwardsb/repositories/brandon-atlas-cli/src/empty_test_model_file_not_expected_to_persist.onnx",
+          "alg": "sha384",
+          "hash": "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b",
+          "data_types": [
+            "c2pa.types.model.onnx"
+          ],
+          "linked_ingredient_url": null,
+          "linked_ingredient_hash": null
+        },
+        "linked_ingredient": null
+      }
+    ],
+    "signature": null,
+    "claim_generator_info": "atlas-cli:0.2.0",
+    "created_at": "2026-02-10T22:38:06.106306248Z"
+  },
+  "is_active": true
+}

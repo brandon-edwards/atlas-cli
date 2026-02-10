@@ -1043,8 +1043,8 @@ mod tests {
             hash_alg: HashAlgorithm::Sha384,
             key_path: Some(key_path),
             output_encoding: "json".to_string(),
-            print: true,
-            storage: None, // Use filesystem storage for testing
+            print: false,
+            storage: Some(file_storage), // Use filesystem storage for testing
             with_cc: false,
             linked_manifests: None,
             custom_fields: None,
@@ -1071,7 +1071,7 @@ mod tests {
             hash_alg: HashAlgorithm::Sha384,
             key_path: Some(key_path),
             output_encoding: "json".to_string(),
-            print: true,
+            print: false,
             storage: Some(file_storage),
             with_cc: false,
             linked_manifests: None,
