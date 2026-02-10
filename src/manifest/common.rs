@@ -974,7 +974,8 @@ impl ManifestFormat {
                 "json" => {
                     let metadata_container_json =
                         to_string_pretty(&metadata_container).map_err(|e| Error::Serialization(e.to_string()))?;
-                    println!("{metadata_container_json}");
+                    // TODO: Remove the Brandon reference below
+                    println!("BRANDON_TEST_PRINT-- {metadata_container_json}");
                 }
                 "cbor" => {
                     let metadata_container_cbor = serde_cbor::to_vec(&metadata_container)
@@ -1008,21 +1009,31 @@ mod tests {
     use super::*;
     use crate::signing::test_utils::generate_temp_key;
     use tempfile::TempPath;
-    use std::fs::OpenOptions;
+    use std::fs::{OpenOptions, create_dir_all};
+    use crate::storage::FilesystemStorage;
 
     const TEST_ASSET_FILENAME: &str = "empty_test_model_file_not_expected_to_persist.onnx";
-
+    // file system storage for the duration of each individual test (placed in a tempdir)
+    fn setup_filesystem_storage() -> Result<&'static FilesystemStorage> {
+        let storage_dir = module_dir().join("test_storage_directory");
+        create_dir_all(&storage_dir)?;
+        let file_storage = FilesystemStorage::new(storage_dir)?;
+        let file_storage: &'static FilesystemStorage = Box::leak(Box::new(file_storage));
+        Ok(file_storage)
+    }
     // Helper function to get the module directory (for a predetermined directory in which to create temporary test files)
     fn module_dir() -> PathBuf {
         PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("src")
     }
 
-    fn make_test_manifest_config() -> (tempfile::TempDir, ManifestCreationConfig) {
+    fn make_test_manifest_config() -> Result<(tempfile::TempDir, ManifestCreationConfig)> {
         let (_secure_key, tmp_key_dir) = generate_temp_key().unwrap();
         let key_path = tmp_key_dir.path().join("test_key.pem");
+        // I want to manually inspect the storage output after tests
+        let file_storage = setup_filesystem_storage()?;
         // must return the temp_key_dir (temp dirs get deleted when out of scope)
-        (tmp_key_dir, ManifestCreationConfig {
+        Ok((tmp_key_dir, ManifestCreationConfig {
             name: "test-model".to_string(),
             description: Some("A test model".to_string()),
             author_name: Some("Test Author".to_string()),
@@ -1032,23 +1043,25 @@ mod tests {
             hash_alg: HashAlgorithm::Sha384,
             key_path: Some(key_path),
             output_encoding: "json".to_string(),
-            print: false,
-            storage: None,
+            print: true,
+            storage: None, // Use filesystem storage for testing
             with_cc: false,
             linked_manifests: None,
             custom_fields: None,
             software_type: None,
             version: None,
-        })
+        }))
     }
 
-    fn make_test_oms_manifest_config() -> (tempfile::TempDir, PathBuf, ManifestCreationConfig) {
-        let (_secure_key, tmp_key_dir) = generate_temp_key().unwrap();
+    fn make_test_oms_manifest_config() -> Result<(tempfile::TempDir, PathBuf, ManifestCreationConfig)> {
+        let (_secure_key, tmp_key_dir) = generate_temp_key()?;
         let key_path = tmp_key_dir.path().join("test_key.pem");
         let asset_dirpath = module_dir();
         let path = asset_dirpath.join(TEST_ASSET_FILENAME);
+        // I want to manually inspect the storage output after tests
+        let file_storage = setup_filesystem_storage()?;
         // return the temp_dir (avoid deletion due to coming out of scope)
-        (tmp_key_dir, asset_dirpath, ManifestCreationConfig {
+        Ok((tmp_key_dir, asset_dirpath, ManifestCreationConfig {
             name: "test-model".to_string(),
             description: Some("A test model".to_string()),
             author_name: Some("Test Author".to_string()),
@@ -1058,35 +1071,37 @@ mod tests {
             hash_alg: HashAlgorithm::Sha384,
             key_path: Some(key_path),
             output_encoding: "json".to_string(),
-            print: false,
-            storage: None,
+            print: true,
+            storage: Some(file_storage),
             with_cc: false,
             linked_manifests: None,
             custom_fields: None,
             software_type: None,
             version: None,
-        })
+        }))
     }
 
     #[test]
-    fn test_generate_c2pa_assertions() {
-        let (_tmp_key_dir, config) = make_test_manifest_config();
+    fn test_generate_c2pa_assertions() -> Result<()> {
+        let (_tmp_key_dir, config) = make_test_manifest_config()?;
 
-        let assertions = generate_c2pa_assertions(&config, AssetKind::Model).unwrap();
+        let assertions = generate_c2pa_assertions(&config, AssetKind::Model)?;
         assert!(!assertions.is_empty()); // Should have at least the CreativeWork assertion
+        Ok(())
     }
 
     #[test]
-    fn test_generate_c2pa_claim() {
-        let (_tmp_key_dir, config) = make_test_manifest_config();
-        let claim = generate_c2pa_claim(&config, AssetKind::Model).unwrap();
+    fn test_generate_c2pa_claim() -> Result<()> {
+        let (_tmp_key_dir, config) = make_test_manifest_config()?;
+        let claim = generate_c2pa_claim(&config, AssetKind::Model)?;
         assert!(claim.instance_id.starts_with("urn:c2pa:"));
         assert_eq!(claim.claim_generator_info, "atlas-cli:0.2.0");
+        Ok(())
     }
 
     #[test]
     fn test_create_manifest() -> Result<()>{
-        let (_tmp_key_dir, config) = make_test_manifest_config();
+        let (_tmp_key_dir, config) = make_test_manifest_config()?;
         let result = create_manifest(config, AssetKind::Model);
         assert!(result.is_ok()); // Should succeed even with no ingredients
 
@@ -1095,7 +1110,7 @@ mod tests {
 
     #[test]
     fn test_create_oms_manifest() -> Result<()> {
-        let (_tmp_key_dir, asset_dirpath, config) = make_test_oms_manifest_config();
+        let (_tmp_key_dir, asset_dirpath, config) = make_test_oms_manifest_config()?;
         let asset_path = asset_dirpath.join(TEST_ASSET_FILENAME);
         let _file = OpenOptions::new()
             .write(true)
@@ -1111,10 +1126,11 @@ mod tests {
     }
 
     #[test]
-    fn test_create_oms_manifest_no_key() {
-        let (_dir, _asset_dirpath, mut config) = make_test_oms_manifest_config();
+    fn test_create_oms_manifest_no_key() -> Result<()> {
+        let (_dir, _asset_dirpath, mut config) = make_test_oms_manifest_config()?;
         config.key_path = None; // Remove the key path to simulate missing key
         let result = create_oms_manifest(config);
         assert!(result.is_err()); // Should fail because OMS requires a signing key
+        Ok(())
     }
 }
